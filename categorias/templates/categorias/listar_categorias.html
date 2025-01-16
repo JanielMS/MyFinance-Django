@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block PageTitle %}
+Categorias
+{% endblock PageTitle %}
+
+{% block content %}
+<div class="actions-header">
+    <div class="actions">
+        <a href="{% url 'criar-categoria'%}">Nova Categoria</a>
+    </div>
+</div>
+{% if categorias %}
+<table>
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for categoria in categorias %}
+        <tr>
+            <td>{{ categoria.nome }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>Nenhuma Categoria Cadastrada!</p>
+{% endif %}
+
+{% endblock content %}
