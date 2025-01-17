@@ -5,51 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    {% comment %} <link rel="stylesheet" href="{% static 'css/styles.css' %}"> {% endcomment %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="stylesheet" href="{% static 'css/icons/remixicon.css' %}">
 
     <script src="{% static 'js/bootstrap.bundle.min.js' %}" defer></script>
-    <script src="{% static 'js/scripts.js'%}" defer></script>
+    <script src="{% static 'js/scripts.js' %}" defer></script>
 
     <title>{% block PageTitle %}{% endblock PageTitle %} - MyFinance</title>
 </head>
 <body>
-    <nav id="sidebar" class="sidebar">
-        <div class="sidebar-header">
-            <h2><span>My</span>Finance</h2>
+    <div class="d-flex">
+        <div id="sidebar" class="sidebar shadow">
+            <div class="sidebar-header">
+                <button id="toggle-sidebar" class="toggle-sidebar"><i id="toggle-sidebar-icon" class="ri-sidebar-unfold-line"></i></button>
+                <h2 class="brand"><span>My</span>Finance</h2>
+            </div>
+             <!-- Botão Novo -->
+            <div class="dropdown">
+                <button class="btn flex justify-content-center align-items-center shadow" type="button" id="dropdownNovo" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="icon"><i class="ri-add-line"></i></span>
+                    <span class="text">Novo</span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownNovo">
+                    <li><a class="dropdown-item load-modal" href="#" data-url="{% url 'adicionar-despesa' %}">Despesa</a></li>
+                    {% comment %} <li><a class="dropdown-item load-modal" href="#" data-url="{% url 'url_para_criar_categoria_modal' %}">Nova Categoria</a></li> {% endcomment %}
+                    <!-- Adicione mais itens conforme necessário -->
+                </ul>
+            </div>
+            <!-- Menu Lista -->
+            <nav class="menu">
+                <a href="{% url 'home'%}" class="menu-item {% if request.path == '/' %}active{% endif %}">
+                    <span class="icon"><i class="ri-home-5-line"></i></span>
+                    <span class="text">Inicio</span>
+                </a>
+                <a href="{% url 'listar-categorias'%}" class="menu-item {% if request.path == '/categorias' %}active{% endif %}">
+                    <span class="icon"><i class="ri-bookmark-2-line"></i></span>
+                    <span class="text">Categorias</span>
+                </a>
+            </nav>
         </div>
-        <ul>
-            <li><a href="{% url 'home'%}">Inicio</a></li>
-            <li><a href="{% url 'listar-categorias'%}">Categorias</a></li>
-        </ul>
-    </nav>
-    <!-- Botão Novo -->
-    <div class="dropdown">
-        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownNovo" data-bs-toggle="dropdown" aria-expanded="false">
-            Novo
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownNovo">
-            <li><a class="dropdown-item load-modal" href="#" data-url="{% url 'adicionar-despesa' %}">Despesa</a></li>
-            {% comment %} <li><a class="dropdown-item load-modal" href="#" data-url="{% url 'url_para_criar_categoria_modal' %}">Nova Categoria</a></li> {% endcomment %}
-            <!-- Adicione mais itens conforme necessário -->
-        </ul>
-    </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="modalNovo" tabindex="-1" aria-labelledby="modalNovoLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content" id="modalNovoContent">
-                <!-- O conteúdo será carregado via AJAX -->
+        <main class="main-content">
+            {% block content %}
+        
+            {% endblock content %}
+        </main>
+        
+        <!-- Modal -->
+        <div class="modal fade" id="modalNovo" tabindex="-1" aria-labelledby="modalNovoLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content" id="modalNovoContent">
+                    <!-- O conteúdo será carregado via AJAX -->
+                </div>
             </div>
         </div>
     </div>
-
-    <main>
-        {% block content %}
-        
-        {% endblock content %}
-    </main>
-
     <script>
     // Selecione todos os itens com a classe "load-modal"
     document.querySelectorAll('.load-modal').forEach(item => {
@@ -59,16 +68,17 @@
             const url = this.getAttribute('data-url'); // Obtém a URL do atributo data-url
             const modalContent = document.getElementById('modalNovoContent');
 
-            fetch(url)
-                .then(response => response.text())
-                .then(html => {
-                    modalContent.innerHTML = html; // Insere o conteúdo do modal
-                    const modal = new bootstrap.Modal(document.getElementById('modalNovo'));
-                    modal.show(); // Mostra o modal
-                })
-                .catch(error => console.error('Erro ao carregar o modal:', error));
+           fetch(url)
+           .then(response => response.text())
+           .then(html => {
+                modalContent.innerHTML = html; // Insere o conteúdo do modal
+                const modal = new bootstrap.Modal(document.getElementById('modalNovo'));
+                modal.show(); // Mostra o modal
+            })
+            .catch(error => console.error('Erro ao carregar o modal:', error));
         });
-    });
+        })
     </script>
+
 </body>
 </html>

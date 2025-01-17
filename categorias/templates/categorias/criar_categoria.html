@@ -1,7 +1,4 @@
-{% extends "base.html" %}
-
-{% block content %}
-<form method="post">
+<form method="post" action="{% url 'criar-categoria'%}">
     {% csrf_token %}
     <div class="modal-header">
         <h5 class="modal-title">Nova Categoria</h5>
@@ -16,4 +13,6 @@
     </div>
 </form>
 
-{% endblock content %}
+
+
+

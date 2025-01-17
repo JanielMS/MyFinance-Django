@@ -1,27 +1,23 @@
-{% extends "base.html" %}
+{% extends "./base.html" %}
 
-{% block PageTitle %}
-Categorias
-{% endblock PageTitle %}
+{% block appContent %}
 
-{% block content %}
-<div class="actions-header">
-    <div class="actions">
-        <a href="{% url 'criar-categoria'%}">Nova Categoria</a>
-    </div>
-</div>
 {% if categorias %}
-<table>
-    <thead>
+<table class="table table-responsive table-hover shadow">
+    <thead class="table-light rounded">
         <tr>
             <th>Nome</th>
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="rounded">
     {% for categoria in categorias %}
         <tr>
             <td>{{ categoria.nome }}</td>
+            <td class="d-flex justify-content-end gap-3">
+                <span><a href="#" class="btn btn-success load-modal" data-url="{% url 'editar-categoria' categoria.pk %}"><i class="ri-edit-line"></i></a></span>
+                <span><a href="#" class="btn btn-danger load-modal" data-url="{% url 'apagar-categoria' categoria.pk %}"><i class="ri-delete-bin-7-line"></i></a></span>
+            </td>
         </tr>
     {% endfor %}
     </tbody>
@@ -30,4 +26,4 @@ Categorias
 <p>Nenhuma Categoria Cadastrada!</p>
 {% endif %}
 
-{% endblock content %}
+{% endblock appContent %}
