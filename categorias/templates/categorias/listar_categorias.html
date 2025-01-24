@@ -11,12 +11,15 @@
         </tr>
     </thead>
     <tbody class="rounded">
-    {% for categoria in categorias %}
+    {% for categoria, nivel in categorias %}
         <tr>
-            <td>{{ categoria.nome }}</td>
-            <td class="d-flex justify-content-end gap-3">
-                <span><a href="#" class="btn btn-success load-modal" data-url="{% url 'editar-categoria' categoria.pk %}"><i class="ri-edit-line"></i></a></span>
-                <span><a href="#" class="btn btn-danger load-modal" data-url="{% url 'apagar-categoria' categoria.pk %}"><i class="ri-delete-bin-7-line"></i></a></span>
+            <td class="nivel-{{ nivel }}">{{ categoria.nome }}</td>
+            <td class="text-end">
+                <div class="actions">
+                    <span><a href="#" class="btn btn-success load-modal" data-url="{% url 'editar-categoria' categoria.pk %}" title="Editar Categoria"><i class="ri-edit-line"></i></a></span>
+                    <span><a href="#" class="btn btn-danger load-modal" data-url="{% url 'apagar-categoria' categoria.pk %}" title="Apagar Categoria"><i class="ri-delete-bin-7-line"></i></a></span>
+                    <span><a href="#" class="btn btn-secondary load-modal" data-url="{% url 'criar-subcategoria' categoria.pk %}" title="Criar SubCategoria"><i class="ri-add-line"></i></a></span>
+                </div>
             </td>
         </tr>
     {% endfor %}

@@ -1,0 +1,32 @@
+{% if categoria.pk %}
+    <form method="post" action="{% url 'criar-subcategoria' categoria.pk %}">
+    {% csrf_token %}
+    <div class="modal-header">
+        <h5 class="modal-title">Nova Sub-Categoria</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        <div>
+            <input type="hidden" name="categoria_pai" value="{{ categoria.pk }}" />
+            <label for="id_categoria_pai">Categoria Pai:</label>
+            <input type="text" value="{{ categoria.nome }}" readonly style="background-color: #f0f0f0; pointer-events: none;" />
+        </div>
+        <div>
+            <label for="id_nome">Nome:</label>
+            <input type="text" name="nome" id="id_nome" class="form-control {% if form.errors.nome %}is-invalid{% endif %}">
+            {% if form.errors.nome %}
+                <div class="invalid-feedback">
+                    {{ form.errors.nome|striptags }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+    </div>
+</form>
+
+{% else %}
+    <p>Categoria não encontrada!</p>
+{% endif %}

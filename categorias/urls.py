@@ -3,7 +3,10 @@ from .views import *
 
 urlpatterns = [
     path('', ListarCategorias.as_view(), name='listar-categorias'),
-    path('/criar', CriarCategoria.as_view(), name='criar-categoria'),
-    path('/editar/<int:pk>', EditarCategoria.as_view(), name='editar-categoria'),
-    path('/apagar/<int:pk>', ApagarCategoria.as_view(), name='apagar-categoria'),
+    path('criar', CriarCategoria.as_view(), name='criar-categoria'),
+    path('editar/<int:pk>', EditarCategoria.as_view(), name='editar-categoria'),
+    path('apagar/<int:pk>', ApagarCategoria.as_view(), name='apagar-categoria'),
+
+    # SubCategorias
+    path('<int:pk>/criar-subcategoria', CriarSubcategoria.as_view(), name='criar-subcategoria'),
 ]
