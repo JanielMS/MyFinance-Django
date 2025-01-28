@@ -1,11 +1,14 @@
-<form method="post" action="{% url 'criar-categoria'%}">
+{% if categoria.pk %}
+    <form method="post" action="{% url 'editar-subcategoria' categoria.pk %}">
     {% csrf_token %}
     <div class="modal-header">
-        <h5 class="modal-title">Nova Categoria</h5>
+        <h5 class="modal-title">Editar Sub-Categoria</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
     <div class="modal-body">
-        {% for field in form %}
+
+        <div>
+            {% for field in form %}
             <div class="mb-3">
                 <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
                 {{ field }}
@@ -17,10 +20,18 @@
                     </div>
                 {% endif %}
             </div>
-        {% endfor %}
+            {% endfor %}
+            <div>
+                <input type="hidden" name="categoria_pai" value="{{ form.categoria_pai.value }}" />
+            </div>
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
         <button type="submit" class="btn btn-primary">Salvar</button>
     </div>
 </form>
+
+{% else %}
+    <p>Categoria não encontrada!</p>
+{% endif %}
