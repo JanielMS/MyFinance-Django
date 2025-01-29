@@ -46,13 +46,19 @@ class EditarCategoria(UpdateView):
     template_name = 'categorias/editar_categoria.html'
     success_url = reverse_lazy('listar-categorias')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if 'categoria' not in context:
+            context['categoria'] = self.object  # Garante que a categoria está no contexto
+        return context
+
     def form_invalid(self, form):
-       if self.request.headers.get('x-requested-with') == 'XMLHttpRequest': 
-            # Renderizar o formulário com erros para o modal
-            html = render_to_string(self.template_name, {'form': form}, request=self.request)
+        print(form.errors) 
+        if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            html = render_to_string(self.template_name, {'form': form, 'categoria': self.object}, request=self.request)
             return JsonResponse({'success': False, 'html': html}, status=400)
-       return super().form_invalid(form)
-    
+        return super().form_invalid(form)
+        
     def form_valid(self, form):
         if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
             self.object = form.save()
@@ -118,7 +124,7 @@ class EditarSubCategoria(UpdateView):
     
     def form_invalid(self, form):
         if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            html = render_to_string(self.template_name, {'form': form}, request=self.request)
+            html = render_to_string(self.template_name, {'form': form, 'categoria': self.object}, request=self.request)
             return JsonResponse({'success': False, 'html': html}, status=400)
         return super().form_invalid(form)
     

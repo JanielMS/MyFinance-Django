@@ -4,32 +4,32 @@
 
 {% if categorias %}
 <table class="table table-responsive table-hover shadow">
-    <thead class="table-light rounded">
-        <tr>
-            <th>Nome</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody class="rounded">
-    {% for categoria, nivel in categorias %}
-        <tr>
-            <td class="nivel-{{ nivel }}">{{ categoria.nome }}</td>
-            <td class="text-end">
-                <div class="actions">
-                {% if nivel == 1 %}
-                    <span><a href="#" class="btn btn-success load-modal" data-url="{% url 'editar-categoria' categoria.pk %}" title="Editar Categoria"><i class="ri-edit-line"></i></a></span>
-                    <span><a href="#" class="btn btn-danger load-modal" data-url="{% url 'apagar-categoria' categoria.pk %}" title="Apagar Categoria"><i class="ri-delete-bin-7-line"></i></a></span>
-                    <span><a href="#" class="btn btn-secondary load-modal" data-url="{% url 'criar-subcategoria' categoria.pk %}" title="Criar SubCategoria"><i class="ri-add-line"></i></a></span>
-                {% else %}
-                    <span><a href="#" class="btn btn-success load-modal" data-url="{% url 'editar-subcategoria' categoria.pk %}" title="Editar SubCategoria"><i class="ri-edit-line"></i></a></span>
-                    <span><a href="#" class="btn btn-danger load-modal" data-url="{% url 'apagar-categoria' categoria.pk %}" title="Apagar SubCategoria"><i class="ri-delete-bin-7-line"></i></a></span>
-                    <span><a href="#" class="btn btn-secondary load-modal" data-url="{% url 'criar-subcategoria' categoria.pk %}" title="Criar SubCategoria"><i class="ri-add-line"></i></a></span>
-                {% endif %}
-                </div>
-            </td>
-        </tr>
-    {% endfor %}
-    </tbody>
+        <thead class="table-light">
+            <tr>
+                <th>Nome</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for categoria, nivel in categorias %}
+            <tr>
+                <td class="nivel-{{ nivel }}">{{ categoria.nome }}</td>
+                <td class="text-end">
+                    <div class="actions">
+                    {% if nivel == 1 %}
+                        <span><a href="#" class="btn btn-success load-modal" data-url="{% url 'editar-categoria' categoria.pk %}" title="Editar Categoria"><i class="ri-edit-line"></i></a></span>
+                        <span><a href="#" class="btn btn-danger load-modal" data-url="{% url 'apagar-categoria' categoria.pk %}" title="Apagar Categoria"><i class="ri-delete-bin-7-line"></i></a></span>
+                        <span><a href="#" class="btn btn-secondary load-modal" data-url="{% url 'criar-subcategoria' categoria.pk %}" title="Criar SubCategoria"><i class="ri-add-line"></i></a></span>
+                    {% else %}
+                        <span><a href="#" class="btn btn-success load-modal" data-url="{% url 'editar-subcategoria' categoria.pk %}" title="Editar SubCategoria"><i class="ri-edit-line"></i></a></span>
+                        <span><a href="#" class="btn btn-danger load-modal" data-url="{% url 'apagar-categoria' categoria.pk %}" title="Apagar SubCategoria"><i class="ri-delete-bin-7-line"></i></a></span>
+                        <span><a href="#" class="btn btn-secondary load-modal" data-url="{% url 'criar-subcategoria' categoria.pk %}" title="Criar SubCategoria"><i class="ri-add-line"></i></a></span>
+                    {% endif %}
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
 </table>
 {% else %}
 <p>Nenhuma Categoria Cadastrada!</p>

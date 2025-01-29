@@ -80,43 +80,34 @@
 
         // Enviar o formulário via AJAX
         document.getElementById('modalNovoContent').addEventListener('submit', function (e) {
-            e.preventDefault();
+    e.preventDefault();
 
-            const form = e.target;
-            const formData = new FormData(form);
+    const form = e.target;
+    const formData = new FormData(form);
 
-            fetch(form.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                },
-            })
-            .then(response => {
-                // Verifica se a resposta é JSON
-                if (!response.ok) {
-                    throw new Error('Erro de rede');
-                }
-                return response.json(); // Converte a resposta para JSON
-            })
-            .then(data => {
-                if (data.success) {
-                    // Fecha o modal e recarrega a página ao salvar com sucesso
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('modalNovo'));
-                    modal.hide();
-                    location.reload();
-                } else {
-                    // Atualiza o conteúdo do modal com os erros do formulário
-                    document.getElementById('modalNovoContent').innerHTML = data.html;
-                    const modal = new bootstrap.Modal(document.getElementById('modalNovo'));
-                    modal.show();
-                }
-            })
-            .catch(error => {
-                console.error('Erro ao enviar o formulário:', error);
-                // Exibe uma mensagem de erro mais amigável se a resposta não for JSON ou se houver um erro de rede
-            });
-        });
+    // Adiciona o CSRF token manualmente no cabeçalho
+    const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+
+    fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRFToken': csrfToken, // Adiciona o CSRF token
+        },
+    })
+    .then(response => response.json())  // Agora trata a resposta como JSON
+    .then(data => {
+        if (data.success) {
+            const modal = bootstrap.Modal.getInstance(document.getElementById('modalNovo'));
+            modal.hide();
+            location.reload();
+        } else {
+            document.getElementById('modalNovoContent').innerHTML = data.html;
+        }
+    })
+    .catch(error => console.error('Erro ao enviar o formulário:', error));
+});
 
     </script>
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
