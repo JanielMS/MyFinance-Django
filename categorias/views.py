@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.template.loader import render_to_string
-from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, View, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Categoria
@@ -18,9 +18,10 @@ def listar_categorias(categorias, nivel=1):
 
 class ListarCategorias(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        categorias = Categoria.objects.filter(usuario=request.user, categoria_pai__isnull=True)
+        tipo_categoria = request.GET.get('tipo_categoria', 'D') 
+        categorias = Categoria.objects.filter(usuario=request.user, categoria_pai__isnull=True, tipo=tipo_categoria)
         categorias_hierarquicas = listar_categorias(categorias)
-        return render(request, 'categorias/listar_categorias.html', {'categorias': categorias_hierarquicas})
+        return render(request, 'categorias/listar_categorias.html', {'categorias': categorias_hierarquicas, 'tipo_categoria': tipo_categoria})
 
 
 class CriarCategoria(LoginRequiredMixin, CreateView):
@@ -36,11 +37,19 @@ class CriarCategoria(LoginRequiredMixin, CreateView):
         return super().form_invalid(form)
     
     def form_valid(self, form):
+        form.instance.usuario = self.request.user 
+        self.object = form.save()
+         # 🔹 Obtém o tipo de categoria enviada no formulário
+        tipo_categoria = self.object.tipo  # 'D' para Despesa, 'R' para Receita
+        
+        # 🔹 Redireciona para a listagem do mesmo tipo
+        success_url = reverse('listar-categorias') + f'?tipo_categoria={tipo_categoria}'
+        
         if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
             self.object = form.save()
-            return JsonResponse({'success': True})
-        form.instance.usuario = self.request.user 
-        return super().form_valid(form)
+            return JsonResponse({'success': True, 'redirect_url': success_url})
+        
+        return redirect(success_url)  # 🔄 Redireciona para a página correta
 
 class EditarCategoria(LoginRequiredMixin, UpdateView):
     model = Categoria
@@ -62,11 +71,20 @@ class EditarCategoria(LoginRequiredMixin, UpdateView):
         return super().form_invalid(form)
         
     def form_valid(self, form):
+        form.instance.usuario = self.request.user 
+        self.object = form.save()
+         # 🔹 Obtém o tipo de categoria enviada no formulário
+        tipo_categoria = self.object.tipo  # 'D' para Despesa, 'R' para Receita
+        
+        # 🔹 Redireciona para a listagem do mesmo tipo
+        success_url = reverse('listar-categorias') + f'?tipo_categoria={tipo_categoria}'
+        
         if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
             self.object = form.save()
-            return JsonResponse({'success': True})
-        form.instance.usuario = self.request.user 
-        return super().form_valid(form)
+            return JsonResponse({'success': True, 'redirect_url': success_url})
+        
+        return redirect(success_url)  # 🔄 Redireciona para a página correta
+       
 
 class ApagarCategoria(LoginRequiredMixin, DeleteView):
     model = Categoria
@@ -75,13 +93,19 @@ class ApagarCategoria(LoginRequiredMixin, DeleteView):
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        self.object.delete()
         
+
+         # 🔹 Obtém o tipo de categoria enviada no formulário
+        tipo_categoria = self.object.tipo  # 'D' para Despesa, 'R' para Receita
         
-        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            return JsonResponse({'success': True})
+        # 🔹 Redireciona para a listagem do mesmo tipo
+        success_url = reverse('listar-categorias') + f'?tipo_categoria={tipo_categoria}'
         
-        return super().post(request, *args, **kwargs)
+        if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            self.object.delete()
+            return JsonResponse({'success': True, 'redirect_url': success_url})
+        
+        return redirect(success_url)  # 🔄 Redireciona para a página correta
 
 class CriarSubcategoria(LoginRequiredMixin, CreateView):
     model = Categoria
@@ -105,10 +129,12 @@ class CriarSubcategoria(LoginRequiredMixin, CreateView):
         return super().form_invalid(form)
     
     def form_valid(self, form):
+        form.instance.usuario = self.request.user 
+
         if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
             self.object = form.save()
             return JsonResponse({'success': True})
-        form.instance.usuario = self.request.user 
+        
         return super().form_valid(form)
 
 
@@ -133,8 +159,10 @@ class EditarSubCategoria(LoginRequiredMixin, UpdateView):
         return super().form_invalid(form)
     
     def form_valid(self, form):
+        form.instance.usuario = self.request.user 
+        
         if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
             self.object = form.save()
             return JsonResponse({'success': True})
-        form.instance.usuario = self.request.user 
+        
         return super().form_valid(form)

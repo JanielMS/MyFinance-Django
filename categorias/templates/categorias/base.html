@@ -11,10 +11,14 @@ Categorias
             <h4>Categorias</h4>
         </div>
         <div class="actions">
+            <select id="tipo_categoria">
+                <option value="D" {% if tipo_categoria == "D" %}selected{% endif %}>Despesas</option>
+                <option value="R" {% if tipo_categoria == "R" %}selected{% endif %}>Receitas</option>
+            </select>
             <a href="#" class="btn btn-secondary load-modal" data-url="{% url 'criar-categoria'%}"><i class="ri-add-line"></i> Nova Categoria</a>
         </div>
     </div>
-    <div class="mt-5">
+    <div class="mt-5 container-categorias" id="categorias-container">
         {% block appContent %}
     
         {% endblock appContent %}
@@ -22,3 +26,26 @@ Categorias
 </div>
 
 {% endblock content %}
+
+{% block areaScript %}
+<script>
+document.getElementById('tipo_categoria').addEventListener('change', function () {
+    const tipoSelecionado = this.value;
+    fetch(`/categorias/?tipo_categoria=${tipoSelecionado}`, {
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.text())
+    .then(html => {
+        // Atualiza apenas a tabela de categorias
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        document.getElementById('categorias-container').innerHTML = 
+            doc.getElementById('categorias-container').innerHTML;
+    })
+    .catch(error => console.error('Erro ao carregar categorias:', error));
+});
+</script>
+{% endblock areaScript %}
