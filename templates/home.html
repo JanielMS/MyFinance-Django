@@ -5,8 +5,16 @@ Inicio
 {% endblock PageTitle %}
 
 {% block content %}
-<div class="mt-5">
-    <h2>Outras Funcionaliades em Breve!</h2>
-    <p>Até o momento, somente CRUD de categorias</p>
+<div class="mt-5 content-header d-flex justify-content-between">
+    <div>
+        {% if user.is_authenticated %}
+                <h2>Olá, {{ user.username }}!</h2>
+        {%else%}
+                <p>Usuário não Cadastrado!</p>
+                <a href="{% url 'logout' %}">Sair</a>
+        {% endif %}
+        <h4>Outras Funcionaliades em Breve!</h4>
+        <p>Até o momento, somente CRUD de categorias</p>
+    </div>
 </div>
 {% endblock content %}

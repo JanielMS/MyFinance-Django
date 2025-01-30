@@ -1,0 +1,14 @@
+{% extends "./index.html" %}
+{% block titleArea %}
+Registrar
+{% endblock titleArea %}
+
+{% block authArea %}
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Registrar</button>
+</form>
+<p>Já tem uma conta? <a href="{% url 'login' %}">Entrar</a></p>
+
+{% endblock authArea %}

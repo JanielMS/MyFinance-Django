@@ -1,0 +1,15 @@
+{% extends "./index.html" %}
+{% block titleArea %}
+Login
+{% endblock titleArea %}
+
+{% block authArea %}
+<form method="POST">
+    {% csrf_token %}
+    {{form.as_p}}
+    <p>Entrar com Dados Preenchidos? Entre com: <br>Usuário: Teste <br>Senha: 1234adminteste</p>
+    
+    <button type="submit">Entrar</button>
+</form>
+<p>Não tem uma conta? <a href="{% url 'registrar' %}">Cadastre-se</a></p>
+{% endblock authArea %}

@@ -3,6 +3,7 @@ from django.template.loader import render_to_string
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, View, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Categoria
 from .forms import CategoriaForm, SubcategoriaForm
 
@@ -15,14 +16,14 @@ def listar_categorias(categorias, nivel=1):
             lista.extend(listar_categorias(subcategorias, nivel + 1))
     return lista
 
-class ListarCategorias(View):
+class ListarCategorias(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        categorias = Categoria.objects.filter(categoria_pai__isnull=True)
+        categorias = Categoria.objects.filter(usuario=request.user, categoria_pai__isnull=True)
         categorias_hierarquicas = listar_categorias(categorias)
         return render(request, 'categorias/listar_categorias.html', {'categorias': categorias_hierarquicas})
 
 
-class CriarCategoria(CreateView):
+class CriarCategoria(LoginRequiredMixin, CreateView):
     model = Categoria
     form_class = CategoriaForm
     template_name = 'categorias/criar_categoria.html'
@@ -38,9 +39,10 @@ class CriarCategoria(CreateView):
         if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
             self.object = form.save()
             return JsonResponse({'success': True})
+        form.instance.usuario = self.request.user 
         return super().form_valid(form)
 
-class EditarCategoria(UpdateView):
+class EditarCategoria(LoginRequiredMixin, UpdateView):
     model = Categoria
     form_class = CategoriaForm
     template_name = 'categorias/editar_categoria.html'
@@ -63,9 +65,10 @@ class EditarCategoria(UpdateView):
         if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
             self.object = form.save()
             return JsonResponse({'success': True})
+        form.instance.usuario = self.request.user 
         return super().form_valid(form)
 
-class ApagarCategoria(DeleteView):
+class ApagarCategoria(LoginRequiredMixin, DeleteView):
     model = Categoria
     template_name = 'categorias/apagar_categoria.html'
     success_url = reverse_lazy('listar-categorias')
@@ -80,7 +83,7 @@ class ApagarCategoria(DeleteView):
         
         return super().post(request, *args, **kwargs)
 
-class CriarSubcategoria(CreateView):
+class CriarSubcategoria(LoginRequiredMixin, CreateView):
     model = Categoria
     form_class = SubcategoriaForm
     template_name = 'categorias/criar_subcategoria.html'
@@ -105,10 +108,11 @@ class CriarSubcategoria(CreateView):
         if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
             self.object = form.save()
             return JsonResponse({'success': True})
+        form.instance.usuario = self.request.user 
         return super().form_valid(form)
 
 
-class EditarSubCategoria(UpdateView):
+class EditarSubCategoria(LoginRequiredMixin, UpdateView):
     model = Categoria
     form_class = SubcategoriaForm
     template_name = 'categorias/editar_subcategoria.html'
@@ -132,4 +136,5 @@ class EditarSubCategoria(UpdateView):
         if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
             self.object = form.save()
             return JsonResponse({'success': True})
+        form.instance.usuario = self.request.user 
         return super().form_valid(form)

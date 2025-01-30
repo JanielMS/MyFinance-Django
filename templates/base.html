@@ -31,7 +31,7 @@
             </div>
             <!-- Menu Lista -->
             <nav class="menu">
-                <a href="{% url 'home'%}" class="menu-item {% if request.path == '/' %}active{% endif %}">
+                <a href="{% url 'home'%}" class="menu-item {% if request.path == '/dashboard/' %}active{% endif %}">
                     <span class="icon"><i class="ri-home-5-line"></i></span>
                     <span class="text">Inicio</span>
                 </a>
@@ -40,6 +40,12 @@
                     <span class="text">Categorias</span>
                 </a>
             </nav>
+            <div>
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit">Sair</button>
+                </form>
+            </div>
         </div>
         <main class="main-content">
             {% block content %}
