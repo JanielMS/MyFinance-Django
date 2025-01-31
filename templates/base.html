@@ -24,8 +24,8 @@
                     <span class="text">Novo</span>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownNovo">
-                    <li><a class="dropdown-item load-modal" href="#" data-url="{% url 'adicionar-despesa' %}">Despesa</a></li>
-                    {% comment %} <li><a class="dropdown-item load-modal" href="#" data-url="{% url 'url_para_criar_categoria_modal' %}">Nova Categoria</a></li> {% endcomment %}
+                    <li><a class="dropdown-item load-modal despesas" href="#" data-url="{% url 'adicionar-despesa' %}"><i class="ri-arrow-right-down-long-line"></i> Despesa</a></li>
+                    <li><a class="dropdown-item load-modal receita" href="#" data-url="{% url 'adicionar-receita' %}"><i class="ri-arrow-right-up-long-line"></i> Receita</a></li>
                     <!-- Adicione mais itens conforme necessário -->
                 </ul>
             </div>

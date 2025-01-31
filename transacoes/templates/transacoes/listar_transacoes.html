@@ -20,15 +20,17 @@
                                     </td>
                                     <td class="text-end {% if transacao.tipo == 'R' %}text-success{% else %}text-danger{% endif %}">
                                         <h5>{{ transacao.valor }}</h5>
-                                    </td>
-                                    <td class="text-end">
                                         <div class="actions">
                                             {%  if transacao.tipo == 'D' %}
                                                 <span><a href="#" class="btn btn-success load-modal" data-url="{% url 'editar-despesa' transacao.pk %}" title="Editar Transação"><i class="ri-edit-line"></i></a></span>
                                                 <span><a href="#" class="btn btn-danger load-modal" data-url="{% url 'apagar-transacao' transacao.pk %}" title="Apagar Transação"><i class="ri-delete-bin-7-line"></i></a></span>
+                                            {% else %}
+                                                <span><a href="#" class="btn btn-success load-modal" data-url="{% url 'editar-receita' transacao.pk %}" title="Editar Transação"><i class="ri-edit-line"></i></a></span>
+                                                <span><a href="#" class="btn btn-danger load-modal" data-url="{% url 'apagar-transacao' transacao.pk %}" title="Apagar Transação"><i class="ri-delete-bin-7-line"></i></a></span>
                                             {% endif %}
                                         </div>
                                     </td>
+                                    
                                 </tr>
                             {% endfor %}
                         </tbody>
