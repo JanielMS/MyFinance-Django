@@ -1,24 +1,24 @@
 {% extends "base.html" %}
 
 {% block PageTitle %}
-Categorias
+Transações
 {% endblock PageTitle %}
 
 {% block content %}
 <div class="p-5">
     <div class="actions-header d-flex align-items-center justify-content-between">
         <div>
-            <h4>Categorias</h4>
+            <h4>Transações</h4>
         </div>
         <div class="actions">
-            <select id="tipo_categoria" class="tipo_select">
-                <option value="D" {% if tipo_categoria == "D" %}selected{% endif %}>Despesas</option>
-                <option value="R" {% if tipo_categoria == "R" %}selected{% endif %}>Receitas</option>
+            <select class="tipo_select" id="tipo_transacao" onchange="window.location.href = '?tipo_categoria=' + this.value;">
+                <option value="" {% if tipo_transacao is None %}selected{% endif %}>Todas</option>
+                <option value="D" {% if tipo_transacao == 'D' %}selected{% endif %}>Despesas</option>
+                <option value="R" {% if tipo_transacao == 'R' %}selected{% endif %}>Receitas</option>
             </select>
-            <a href="#" class="btn btn-secondary load-modal" data-url="{% url 'criar-categoria'%}"><i class="ri-add-line"></i> Nova Categoria</a>
         </div>
     </div>
-    <div class="mt-5 container-categorias" id="categorias-container">
+    <div class="mt-5" id="transacoes-container">
         {% block appContent %}
     
         {% endblock appContent %}
@@ -29,9 +29,9 @@ Categorias
 
 {% block areaScript %}
 <script>
-document.getElementById('tipo_categoria').addEventListener('change', function () {
+document.getElementById('tipo_transacao').addEventListener('change', function () {
     const tipoSelecionado = this.value;
-    fetch(`/categorias/?tipo_categoria=${tipoSelecionado}`, {
+    fetch(`/categorias/?tipo_transacao=${tipoSelecionado}`, {
         method: 'GET',
         headers: {
             'X-Requested-With': 'XMLHttpRequest'
@@ -42,8 +42,8 @@ document.getElementById('tipo_categoria').addEventListener('change', function ()
         // Atualiza apenas a tabela de categorias
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
-        document.getElementById('categorias-container').innerHTML = 
-            doc.getElementById('categorias-container').innerHTML;
+        document.getElementById('transacoes-container').innerHTML = 
+            doc.getElementById('transacoes-container').innerHTML;
     })
     .catch(error => console.error('Erro ao carregar categorias:', error));
 });

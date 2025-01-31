@@ -1,0 +1,15 @@
+<form  method="post" action="{% url 'apagar-transacao' transacao.pk%}">
+    {% csrf_token %}
+    <div class="modal-header">
+        <h5 class="modal-title">Apagar Despesa</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        <h2>Deseja apagar está Transação?</h2>
+        <h3>{{transacao.valor}} - {{transacao.categoria.nome}} {{transacao.descricao}}</h3>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Sim, Apagar</button>
+    </div>
+</form>
