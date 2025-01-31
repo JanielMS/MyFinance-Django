@@ -1,0 +1,27 @@
+{% extends "./base.html" %}
+
+{% block appContent %}
+
+{% if contas %}
+<table class="table-card">
+        <tbody>
+        {% for conta in contas %}
+            <tr class="shadow">
+                <td><h3>{{ conta.nome }}</h3></td>
+                <td><p>{{conta.saldo_atual}}</p></td>
+                <td class="text-end">
+                    <div class="actions">
+                        <span><a href="#" class="btn btn-success load-modal" data-url="{% url 'editar-conta' conta.pk %}" title="Editar Categoria"><i class="ri-edit-line"></i></a></span>
+                        <span><a href="#" class="btn btn-danger load-modal" data-url="{% url 'apagar-conta' conta.pk %}" title="Apagar Categoria"><i class="ri-delete-bin-7-line"></i></a></span>
+                  
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+</table>
+{% else %}
+<p>Nenhuma Categoria Cadastrada!</p>
+{% endif %}
+
+{% endblock appContent %}

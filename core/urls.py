@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include("usuarios.urls")),
     path('dashboard/', Home.as_view(), name="home"),
+    path('contas/', include("contas.urls")),
     path('transacoes/', include("transacoes.urls")),
     path('categorias/', include("categorias.urls")),
 ]

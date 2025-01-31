@@ -4,6 +4,7 @@ from django.core.validators import MinValueValidator
 from datetime import date
 
 from categorias.models import Categoria
+from contas.models import Conta
 
 # TEMA ESCOLHIDO: Gerenciamento de Finanças Pessoais
 
@@ -16,14 +17,32 @@ class Transacao(models.Model):
 
     usuario = models.ForeignKey(User, on_delete=models.CASCADE) 
     categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True)
+    conta = models.ForeignKey(Conta, on_delete=models.CASCADE, related_name="transacoes")  # Vínculo com Conta
     tipo = models.CharField(max_length=1, choices=TIPOS_TRANSACAO)
     valor = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0.01)])
-    data = models.DateField()
-    descricao = models.TextField(blank=True, null=True)
+    data = models.DateField( )
+    descricao = models.TextField(max_length=255, blank=True, null=True)
     criado_em = models.DateTimeField(auto_now_add=True)
 
+    def save(self, *args, **kwargs):
+        """ Ao salvar a transação, atualiza o saldo da conta correspondente. """
+        if self.pk:  # Se já existir, buscar a conta antiga
+            transacao_antiga = Transacao.objects.get(pk=self.pk)
+            if transacao_antiga.conta != self.conta:
+                transacao_antiga.conta.atualizar_saldo()
+
+        super().save(*args, **kwargs)
+        self.conta.atualizar_saldo()
+
+    def delete(self, *args, **kwargs):
+        """ Ao excluir uma transação, também recalcula o saldo da conta. """
+        conta_antiga = self.conta
+        super().delete(*args, **kwargs)
+        conta_antiga.atualizar_saldo()
+
     def __str__(self):
-        return f"{self.get_tipo_display()} - {self.valor:.2f}"
+        tipo_str = "Receita" if self.tipo == 'R' else "Despesa"
+        return f"{tipo_str}: R$ {self.valor:.2f} - {self.conta.nome}"
 
     class Meta:
         ordering = ['-data']

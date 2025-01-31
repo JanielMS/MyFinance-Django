@@ -4,7 +4,7 @@ from .models import Transacao, Categoria
 class TransacaoDespesaForm(forms.ModelForm):
     class Meta:
         model = Transacao
-        fields = ['valor', 'categoria', 'data', 'descricao', 'tipo']
+        fields = ['valor', 'conta', 'categoria', 'data', 'descricao', 'tipo']
         widgets = {
             'data': forms.DateInput(attrs={'type': 'date'})
         }
@@ -17,6 +17,8 @@ class TransacaoDespesaForm(forms.ModelForm):
         if 'tipo' in self.fields:
             self.fields['tipo'].label = ''  # Remove a label
             self.fields['tipo'].widget.attrs['aria-label'] = 'Despesas'
+
+        self.fields['conta'].initial = 'Carteira'
         
         if self.instance and self.instance.pk:  
             if self.instance.tipo == 'D':  
@@ -27,7 +29,7 @@ class TransacaoDespesaForm(forms.ModelForm):
 class TransacaoReceitaForm(forms.ModelForm):
     class Meta:
         model = Transacao
-        fields = ['valor', 'categoria', 'data', 'descricao', 'tipo']
+        fields = ['valor', 'conta', 'categoria', 'data', 'descricao', 'tipo']
         widgets = {
             'data': forms.DateInput(attrs={'type': 'date'})
         }
@@ -39,7 +41,9 @@ class TransacaoReceitaForm(forms.ModelForm):
         self.fields['tipo'].widget.attrs['style'] = 'display:none;'
         if 'tipo' in self.fields:
             self.fields['tipo'].label = ''  # Remove a label
-            self.fields['tipo'].widget.attrs['aria-label'] = 'Despesas'
+            self.fields['tipo'].widget.attrs['aria-label'] = 'Receita'
+    
+        self.fields['conta'].initial = 'Carteira'
         
         if self.instance and self.instance.pk:  
             if self.instance.tipo == 'R':  

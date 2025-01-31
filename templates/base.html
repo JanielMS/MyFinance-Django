@@ -40,6 +40,10 @@
                         <span class="icon"><i class="ri-list-indefinite"></i></span>
                         <span class="text">Transações</span>
                     </a>
+                    <a href="{% url 'listar-contas'%}" class="menu-item {% if request.path == '/contas/' %}active{% endif %}">
+                        <span class="icon"><i class="ri-bank-line"></i></span>
+                        <span class="text">Contas</span>
+                    </a>
                     <a href="{% url 'listar-categorias'%}" class="menu-item {% if request.path == '/categorias/' %}active{% endif %}">
                         <span class="icon"><i class="ri-bookmark-2-line"></i></span>
                         <span class="text">Categorias</span>

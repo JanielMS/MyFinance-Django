@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block PageTitle %}
+Contas
+{% endblock PageTitle %}
+
+{% block content %}
+<div class="p-5">
+    <div class="actions-header d-flex align-items-center justify-content-between">
+        <div>
+            <h4>Contas</h4>
+        </div>
+        <div class="actions">
+            <a href="#" class="btn btn-secondary load-modal" data-url="{% url 'criar-conta'%}"><i class="ri-add-line"></i> Nova Conta</a>
+        </div>
+    </div>
+    <div class="mt-5">
+        {% block appContent %}
+    
+        {% endblock appContent %}
+    </div>
+</div>
+
+{% endblock content %}

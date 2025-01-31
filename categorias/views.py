@@ -39,17 +39,17 @@ class CriarCategoria(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.usuario = self.request.user 
         self.object = form.save()
-         # 🔹 Obtém o tipo de categoria enviada no formulário
-        tipo_categoria = self.object.tipo  # 'D' para Despesa, 'R' para Receita
+         
+        tipo_categoria = self.object.tipo 
         
-        # 🔹 Redireciona para a listagem do mesmo tipo
+
         success_url = reverse('listar-categorias') + f'?tipo_categoria={tipo_categoria}'
         
         if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
             self.object = form.save()
             return JsonResponse({'success': True, 'redirect_url': success_url})
         
-        return redirect(success_url)  # 🔄 Redireciona para a página correta
+        return redirect(success_url)  
 
 class EditarCategoria(LoginRequiredMixin, UpdateView):
     model = Categoria

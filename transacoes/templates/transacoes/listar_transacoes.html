@@ -16,7 +16,7 @@
                                         {% else %}
                                             {{ transacao.categoria.nome }}
                                         {% endif %}
-                                        <p>{{ transacao.categoria.nome }} |</p>
+                                        <p>{{ transacao.categoria.nome }} | {{transacao.conta.nome}}</p>
                                     </td>
                                     <td class="text-end {% if transacao.tipo == 'R' %}text-success{% else %}text-danger{% endif %}">
                                         <h5>{{ transacao.valor }}</h5>
