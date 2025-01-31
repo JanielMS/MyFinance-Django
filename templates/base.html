@@ -12,7 +12,7 @@
 </head>
 <body>
     <div class="d-flex">
-        <div id="sidebar" class="sidebar shadow">
+        <div id="sidebar" class="sidebar shadow closed">
             <div class="sidebar-header">
                 <button id="toggle-sidebar" class="toggle-sidebar"><i id="toggle-sidebar-icon" class="ri-sidebar-unfold-line"></i></button>
                 <h2 class="brand"><span>My</span>Finance</h2>
@@ -36,10 +36,15 @@
                         <span class="icon"><i class="ri-home-5-line"></i></span>
                         <span class="text">Inicio</span>
                     </a>
+                    <a href="{% url 'listar-transacoes'%}" class="menu-item {% if request.path == '/transacoes/' %}active{% endif %}">
+                        <span class="icon"><i class="ri-list-indefinite"></i></span>
+                        <span class="text">Transações</span>
+                    </a>
                     <a href="{% url 'listar-categorias'%}" class="menu-item {% if request.path == '/categorias/' %}active{% endif %}">
                         <span class="icon"><i class="ri-bookmark-2-line"></i></span>
                         <span class="text">Categorias</span>
                     </a>
+
                 </div>
 
                 <div class="area-logout">

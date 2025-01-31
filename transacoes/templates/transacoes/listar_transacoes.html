@@ -1,0 +1,42 @@
+{% extends "./base.html" %}
+
+{% block appContent %}
+
+{% if transacoes_por_data %}
+            {% for data, transacoes in transacoes_por_data.items %}
+                <div class="day-list">
+                    <h4>{{ data|date:"d M. Y"  }}</h4> <!-- Data por extenso -->
+                    <table class="table table-responsive table-hover">
+                        <tbody>
+                            {% for transacao in transacoes %}
+                                <tr class="no-divider">
+                                    <td class="trow {% if transacao.tipo == 'R' %}receita{% else %}despesa{% endif %}"">
+                                        {% if transacao.descricao %}
+                                            {{ transacao.descricao }}
+                                        {% else %}
+                                            {{ transacao.categoria.nome }}
+                                        {% endif %}
+                                        <p>{{ transacao.categoria.nome }} |</p>
+                                    </td>
+                                    <td class="text-end {% if transacao.tipo == 'R' %}text-success{% else %}text-danger{% endif %}">
+                                        <h5>{{ transacao.valor }}</h5>
+                                    </td>
+                                    <td class="text-end">
+                                        <div class="actions">
+                                            {%  if transacao.tipo == 'D' %}
+                                                <span><a href="#" class="btn btn-success load-modal" data-url="{% url 'editar-despesa' transacao.pk %}" title="Editar Transação"><i class="ri-edit-line"></i></a></span>
+                                                <span><a href="#" class="btn btn-danger load-modal" data-url="{% url 'apagar-transacao' transacao.pk %}" title="Apagar Transação"><i class="ri-delete-bin-7-line"></i></a></span>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Nenhuma Transação Cadastrada!</p>
+        {% endif %}
+
+{% endblock appContent %}
