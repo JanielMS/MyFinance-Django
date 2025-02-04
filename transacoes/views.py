@@ -4,32 +4,59 @@ from django.urls import reverse_lazy, reverse
 from django.shortcuts import render, redirect
 from django.views.generic import View, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
+
 from .models import Transacao
 from .forms import TransacaoDespesaForm, TransacaoReceitaForm
-import locale
-from django.utils.timezone import localdate
+from datetime import datetime
+
 
 
 class ListarTransacoes(View):
     def get(self, request, *args, **kwargs):
+        mes = int(request.GET.get('mes', datetime.now().month))
+        ano = int(request.GET.get('ano', datetime.now().year))
+
+        meses = {
+            1: 'Janeiro', 2: 'Fevereiro', 3: 'Março', 4: 'Abril', 5: 'Maio', 6: 'Junho',
+            7: 'Julho', 8: 'Agosto', 9: 'Setembro', 10: 'Outubro', 11: 'Novembro', 12: 'Dezembro'
+        }
+        anos = range(datetime.now().year - 5, datetime.now().year + 1)
 
         tipo_transacao = request.GET.get('tipo_categoria', None) 
-        transacoes = Transacao.objects.filter(usuario=request.user, tipo=tipo_transacao)
-        
-        if tipo_transacao:
-            transacoes = Transacao.objects.filter(usuario=request.user, tipo=tipo_transacao)
-        else:
-            transacoes = Transacao.objects.filter(usuario=request.user)  # Sem filtro de tipo
 
-         # Agrupar transações por data em Python
+        transacoes = Transacao.objects.filter(usuario=request.user, data__month=mes, data__year=ano)
+           
+        if tipo_transacao:
+            transacoes = transacoes.filter(tipo=tipo_transacao)
+            
+        
+        transacoes = transacoes.order_by('-data')
+
+        
+        paginator = Paginator(transacoes, 20)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
         transacoes_por_data = {}
-        for transacao in transacoes:
-            data = transacao.data  # Data formatada
+        for transacao in page_obj:
+            data = transacao.data
             if data not in transacoes_por_data:
                 transacoes_por_data[data] = []
             transacoes_por_data[data].append(transacao)
+
+        context = {
+            'transacoes_por_data': transacoes_por_data, 
+            'tipo_transacao': tipo_transacao,
+            'page_obj': page_obj, 
+            'page_number': page_number,
+            'meses': meses,
+            'anos': anos,
+            'mes': mes,
+            'ano': ano,
+        }
        
-        return render(request, "transacoes/listar_transacoes.html", {'transacoes_por_data': transacoes_por_data, 'tipo_transacao': tipo_transacao})
+        return render(request, "transacoes/listar_transacoes.html", context)
     
 class AdicionarDespesa(LoginRequiredMixin, CreateView):
     model = Transacao

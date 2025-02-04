@@ -48,6 +48,10 @@
                         <span class="icon"><i class="ri-bookmark-2-line"></i></span>
                         <span class="text">Categorias</span>
                     </a>
+                    <a href="{% url 'perfil-usuario'%}" class="menu-item {% if request.path == '/perfil/' %}active{% endif %}">
+                        <span class="icon"><i class="ri-user-settings-line"></i></span>
+                        <span class="text">Perfil</span>
+                    </a>
 
                 </div>
 

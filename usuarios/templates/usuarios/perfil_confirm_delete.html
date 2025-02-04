@@ -1,0 +1,14 @@
+<form  method="post" action="{% url 'perfil-excluir'%}">
+    {% csrf_token %}
+    <div class="modal-header">
+        <h5 class="modal-title">Excluir Perfil</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        <h2>Tem certeza que deseja excluir sua conta? Esta ação não pode ser desfeita.</h2>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Sim, Apagar</button>
+    </div>
+</form>

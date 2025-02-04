@@ -11,6 +11,20 @@ Transações
             <h4>Transações</h4>
         </div>
         <div class="actions">
+            <div>
+                <form method="get" action="{% url 'listar-transacoes' %}">
+                    <select name="mes" id="mes" onchange="this.form.submit()" class="shadow-sm">
+                        {% for numero, nome in meses.items %}
+                            <option value="{{ numero }}" {% if numero == mes %}selected{% endif %}>{{ nome }}</option>
+                        {% endfor %}
+                    </select>
+                    <select name="ano" id="ano" onchange="this.form.submit()" class="shadow-sm">
+                        {% for ano_disponivel in anos %}
+                            <option value="{{ ano_disponivel }}" {% if ano_disponivel == ano %}selected{% endif %}>{{ ano_disponivel }}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
             <select class="tipo_select" id="tipo_transacao" onchange="window.location.href = '?tipo_categoria=' + this.value;">
                 <option value="" {% if tipo_transacao is None %}selected{% endif %}>Todas</option>
                 <option value="D" {% if tipo_transacao == 'D' %}selected{% endif %}>Despesas</option>

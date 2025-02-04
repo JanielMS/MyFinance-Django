@@ -5,15 +5,79 @@ Inicio
 {% endblock PageTitle %}
 
 {% block content %}
-<div class="mt-5 content-header d-flex justify-content-between">
-    <div>
+<div class="p-2 pt-5 content-header shadow-sm">
+
+    <div class="container m-auto text-center">
+        
+        <div>
+            <form method="get" action="{% url 'home' %}" class="mb-4">
+                <select name="mes" id="mes" onchange="this.form.submit()">
+                    {% for numero, nome in meses.items %}
+                        <option value="{{ numero }}" {% if numero == mes %}selected{% endif %}>{{ nome }}</option>
+                    {% endfor %}
+                </select>
+                <select name="ano" id="ano" onchange="this.form.submit()">
+                    {% for ano_disponivel in anos %}
+                        <option value="{{ ano_disponivel }}" {% if ano_disponivel == ano %}selected{% endif %}>{{ ano_disponivel }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+
+        </div>
+        <div class="card">
+            <h3>Saldo em Contas</h3>
+            <p>R$ {{ saldo_total|floatformat:2 }}</p>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card text-success">
+                    <h4>Total de Receitas</h4>
+                    <p>R$ {{ total_receitas|floatformat:2 }}</p>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card text-danger">
+                    <h4>Total de Despesas</h4>
+                    <p>R$ {{ total_despesas|floatformat:2 }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="content-home" class="mt-5 px-5">
+    <div class="welcome">
         {% if user.is_authenticated %}
-                <h2>Olá, {{ user.username }}!</h2>
+                <h2>Olá, {% if user.first_name %}{{user.first_name}}{% else %}{{user.username}}{% endif %}!</h2>
         {%else%}
                 <p>Usuário não Cadastrado!</p>
                 <a href="{% url 'logout' %}">Sair</a>
         {% endif %}
-        <h4>Outras Funcionaliades em Breve!</h4>    
+    </div>
+    <h3 class="mb-3 mt-5">Serviços</h3>
+    <div>
+        <table class="table-card">
+        <tbody class='home-grid'>
+            <tr class="shadow">
+                <td><h4>
+                    <span><a href="{% url 'listar-contas' %}" class="text-black" title="Contas"><i class="ri-bank-line"></i>Contas</a></span>
+                </h4></td>
+            </tr>
+            <tr class="shadow">
+                <td><h4>
+                    <span><a href="{% url 'listar-transacoes' %}" class="text-black"     title="Transações"><i class="ri-list-indefinite"></i>Transações</a></span>
+                </h4></td>
+            </tr>
+            <tr class="shadow">
+                <td><h4>
+                    <span><a href="{% url 'listar-categorias' %}" class="text-black"     title="Categorias"><i class="ri-bookmark-2-line"></i>Categorias</a></span>
+                </h4></td>
+            </tr>
+        </tbody>
+</table>
     </div>
 </div>
+
 {% endblock content %}

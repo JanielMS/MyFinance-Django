@@ -37,8 +37,25 @@
                     </table>
                 </div>
             {% endfor %}
-        {% else %}
-            <p>Nenhuma Transação Cadastrada!</p>
+{% else %}
+    <p>Nenhuma Transação Cadastrada!</p>
+{% endif %}
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?mes={{ mes }}&ano={{ ano }}&page=1">Primeira</a>
+            <a href="?mes={{ mes }}&ano={{ ano }}&page={{ page_obj.previous_page_number }}">Anterior</a>
         {% endif %}
 
+        <span class="current">
+            Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?mes={{ mes }}&ano={{ ano }}&page={{ page_obj.next_page_number }}">Próxima</a>
+            <a href="?mes={{ mes }}&ano={{ ano }}&page={{ page_obj.paginator.num_pages }}">Última</a>
+        {% endif %}
+    </span>
+</div>
 {% endblock appContent %}

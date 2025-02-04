@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block PageTitle %}
+Meu Perfil
+{% endblock PageTitle %}
+
+{% block content %}
+<div class="container mt-5">
+    <div>
+        <h2 class="mb-3">Meu Perfil</h2>
+        <p><strong>Nome:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Nome de Usuário:</strong> {{ user.username }}</p>
+        <a href="#" data-url="{% url 'perfil-editar' %}" class="btn btn-primary load-modal">Editar Perfil</a>
+        <a href="#" data-url="{% url 'perfil-excluir' %}" class="btn btn-danger load-modal">Excluir Conta</a>
+    </div>
+</div>
+{% endblock content %}

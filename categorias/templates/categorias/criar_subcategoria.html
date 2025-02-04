@@ -8,16 +8,18 @@
     <div class="modal-body">
         <div>
             <input type="hidden" name="categoria_pai" value="{{ categoria.pk }}" />
-            <label for="id_categoria_pai">Categoria Pai:</label>
+            <label for="id_categoria_pai">Categoria Pai</label>
             <input type="text" value="{{ categoria.nome }}" readonly style="background-color: #f0f0f0; pointer-events: none;" />
         </div>
-        <div>
-            <label for="id_nome">Nome:</label>
+        <div class="mt-2">
+            <label for="id_nome">Nome</label>
             <input type="text" name="nome" id="id_nome" class="form-control {% if form.errors.nome %}is-invalid{% endif %}">
-            {% if form.errors.nome %}
-                <div class="invalid-feedback">
-                    {{ form.errors.nome|striptags }}
-                </div>
+            {% if field.errors %}
+                    <ul class="errorlist mt-3">
+                        {% for error in field.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
             {% endif %}
         </div>
     </div>
