@@ -9,28 +9,28 @@ class ContaModelTest(TestCase):
         self.usuario = User.objects.create_user(username="testuser", password="123456")
         self.conta = Conta.objects.create(
             usuario=self.usuario,
-            nome="Carteira",
-            saldo_inicial=100,
+            nome="Banco",
             saldo_atual=100
         )
 
     def test_criar_conta(self):
         """Testa se uma conta é criada corretamente"""
         self.assertEqual(self.conta.nome, "Banco")
-        self.assertEqual(self.conta.saldo_atual, 1000)
+        self.assertEqual(self.conta.saldo_atual, 100)
 
     def test_atualizar_saldo(self):
         """Testa se o saldo da conta é atualizado corretamente"""
         self.conta.saldo_atual += 500  
         self.conta.save()
         self.conta.refresh_from_db()  
-        self.assertEqual(self.conta.saldo_atual, 1500)
+        self.assertEqual(self.conta.saldo_atual, 600)
 
     def test_saldo_atualizado_apos_transacao(self):
         """ Testa se o saldo da conta é atualizado corretamente após uma transação """
         Transacao.objects.create(
             usuario=self.usuario,
             conta=self.conta,
+            data='2025-02-06',
             valor=50,
             tipo="D",  # Despesa
             descricao="Compra de comida"

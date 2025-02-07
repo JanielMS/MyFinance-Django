@@ -1,11 +1,13 @@
 from django.test import TestCase
+from django.contrib.auth.models import User 
 from categorias.forms import CategoriaForm
 from categorias.models import Categoria
 
 class CategoriaFormTest(TestCase):
     def setUp(self):
         """ Configuração inicial: cria uma categoria existente """
-        self.categoria = Categoria.objects.create(nome="Alimentação", tipo="D")
+        self.user = User.objects.create_user(username="testuser", password="123456")
+        self.categoria = Categoria.objects.create(nome="Alimentação", tipo="D", usuario=self.user)
 
     def test_categoria_duplicada(self):
         """ Testa se o formulário não permite categorias com o mesmo nome """

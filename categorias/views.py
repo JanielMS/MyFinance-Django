@@ -10,7 +10,6 @@ from .forms import CategoriaForm, SubcategoriaForm
 def listar_categorias(categorias, nivel=1):
     lista = []
     for categoria in categorias:
-        print(categoria)
         lista.append((categoria, nivel))
         subcategorias = Categoria.objects.filter(categoria_pai=categoria)
         if subcategorias.exists():
@@ -94,9 +93,6 @@ class ApagarCategoria(LoginRequiredMixin, DeleteView):
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        
-
-        
         tipo_categoria = self.object.tipo  # 'D' para Despesa, 'R' para Receita
         
        

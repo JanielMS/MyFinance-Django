@@ -42,7 +42,7 @@ class Transacao(models.Model):
 
     def __str__(self):
         tipo_str = "Receita" if self.tipo == 'R' else "Despesa"
-        return f"{tipo_str}: R$ {self.valor:.2f} - {self.conta.nome}"
+        return f"{tipo_str}: R$ {self.valor:.2f} - {self.conta.nome} - {self.categoria.nome} Data: {self.data}"
 
     class Meta:
         ordering = ['-data']

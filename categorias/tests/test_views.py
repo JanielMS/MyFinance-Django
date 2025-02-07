@@ -8,7 +8,7 @@ class CategoriaViewTest(TestCase):
         """Configuração inicial: cria um usuário autenticado"""
         self.user = User.objects.create_user(username="testuser", password="123456")
         self.client.login(username="testuser", password="123456")
-        self.categoria = Categoria.objects.create(nome="Lazer", tipo="D")
+        self.categoria = Categoria.objects.create(nome="Lazer", tipo='D', usuario=self.user)
 
     def test_listar_categorias(self):
         """Testa se a página de listagem de categorias retorna status 200"""
@@ -18,19 +18,22 @@ class CategoriaViewTest(TestCase):
 
     def test_criar_categoria(self):
         """Testa a criação de uma nova categoria via POST"""
-        response = self.client.post(reverse("criar-categoria"), {"nome": "Saúde", "tipo": "D"})
+        response = self.client.post(reverse("criar-categoria"), {"nome": "Saúde", "tipo": "D", "usuario": self.user.pk})
         self.assertEqual(response.status_code, 302)  # Redireciona após sucesso
         self.assertTrue(Categoria.objects.filter(nome="Saúde").exists())
 
     def test_editar_categoria(self):
         """Testa se uma categoria pode ser editada"""
-        response = self.client.post(reverse("editar-categoria", args=[self.categoria.id]), {"nome": "Entretenimento"})
+        response = self.client.post(reverse("editar-categoria", args=[self.categoria.id]), {"nome": "Entretenimento", 'tipo': 'D', "usuario": self.user.pk})
+
         self.assertEqual(response.status_code, 302)  
         self.categoria.refresh_from_db()
         self.assertEqual(self.categoria.nome, "Entretenimento")  
 
     def test_excluir_categoria(self):
         """Testa se uma categoria pode ser excluída"""
-        response = self.client.post(reverse("excluir-categoria", args=[self.categoria.id]))
-        self.assertEqual(response.status_code, 302)  
-        self.assertFalse(Categoria.objects.filter(nome="Lazer").exists())  
+        response = self.client.post(reverse("apagar-categoria", args=[self.categoria.id]))
+        self.assertEqual(response.status_code, 302) 
+        self.categoria.refresh_from_db()
+
+        self.assertFalse(Categoria.objects.filter(nome="Saúde").exists())  

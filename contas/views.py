@@ -12,7 +12,6 @@ from .forms import ContaForm, Conta
 class ListarContas(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         contas = Conta.objects.filter(usuario=request.user).order_by('nome')
-        print(contas)
         return render(request, 'contas/listar_contas.html', {'contas': contas})
 
 class CriarConta(LoginRequiredMixin, CreateView):
